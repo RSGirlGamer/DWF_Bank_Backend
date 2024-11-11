@@ -21,6 +21,12 @@ public class UserController {
         List<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable UUID id){
+    	User user = userService.get(id);
+    	return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user, @RequestParam(required = false) UUID createdBy) {

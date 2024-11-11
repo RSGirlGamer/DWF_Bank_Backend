@@ -42,26 +42,12 @@ public class Bank_Clerk {
 	private String phone;
 	
 	@Column
-	private String work_place;
-	
-	@Column
 	private String work_start;
 	
 	@Column
-	private String occupation;
-	
-	@Column
 	private String work_email;
-	
-	@Column
-	private String work_phone;
-	
-	@Column
-	private Double salary;
-	
-	@Column
-	private Integer credit_limit;
-	
+
+
 	@ManyToOne
 	@JoinColumn
 	private User user;

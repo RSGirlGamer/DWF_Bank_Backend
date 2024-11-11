@@ -3,6 +3,7 @@ package com.dwf.bank.models;
 import java.util.Date;
 import java.util.UUID;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,6 +24,10 @@ public class Loan {
 	@ManyToOne
 	@JoinColumn
 	private Account account;
+	
+	@ManyToOne
+	@JoinColumn
+	private Client_Lender ClientLender;
 	
 	@Column
 	private Double amount;

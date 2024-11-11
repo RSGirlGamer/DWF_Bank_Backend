@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -64,11 +66,12 @@ public class Client_Lender {
 	@Column
 	private Integer credit_limit;
 	
+	@Enumerated(EnumType.STRING)
 	@Column
-	private String role;
+	private UserRole role;
 	
 	@ManyToOne
-	@JoinColumn
+	@JoinColumn(nullable = true)
 	private User user;
 	
 	@OneToMany(mappedBy = "client")

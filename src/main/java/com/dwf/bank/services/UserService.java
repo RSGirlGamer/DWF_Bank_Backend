@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import com.dwf.bank.models.User;
+import com.dwf.bank.models.UserRole;
 import com.dwf.bank.repositories.UserRepository;
 
 @Service
@@ -28,7 +29,7 @@ public class UserService {
 
     public User save(User user, UUID createdBy) {
     	user.setId(UUID.randomUUID());  // Asigna un UUID manualmente antes de persistir
-    	if(user.getRole() == "Empleado") {
+    	if(user.getRole() == UserRole.Cajero || user.getRole() == UserRole.Gerente_de_Sucursal) {
     		user.setStatus("Inactivo");
     	} else {
             user.setStatus("Activo"); // Cambiar el estado a inactivo
@@ -71,7 +72,7 @@ public class UserService {
     public void delete(UUID id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
-            user.setRole("Inactivo"); // Cambiar el estado a inactivo
+            user.setStatus("Inactivo"); // Cambiar el estado a inactivo
             userRepository.save(user);  // Guardar el usuario con el nuevo estado
         }
     }

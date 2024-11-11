@@ -30,12 +30,18 @@ public class AccountService {
 
     public Account save(Account account) {
         account.setId(UUID.randomUUID());  // Asigna un UUID manualmente antes de persistir
-
+        
+        System.out.println(account.getId());
     	Client_Lender clientLender = clientLenderRepository.findById(account.getClient().getId()).orElse(null);
-
+    	System.out.println(clientLender);
+    	
+    	if (clientLender == null) {
+            throw new RuntimeException("Cliente no encontrado con el ID: " + account.getClient().getId());
+        }
 
         // Verificamos cuántas cuentas tiene el cliente
         Set<Account> existingAccounts = clientLender.getAccounts(); // Suponiendo que la relación es ManyToMany
+        System.out.println(existingAccounts);
         if (existingAccounts.size() >= 3) {
        	 return null;
         }

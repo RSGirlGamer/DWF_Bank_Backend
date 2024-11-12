@@ -1,10 +1,12 @@
 package com.dwf.bank.controllers;
 
-import com.dwf.bank.models.User;
-import com.dwf.bank.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.dwf.bank.models.User;
+import com.dwf.bank.security.JWTUtil;
+import com.dwf.bank.services.UserService;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private JWTUtil jwtUtil;
     
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
@@ -37,7 +42,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         boolean success = userService.login(user.getUsername(), user.getPassword());
-        return success ? ResponseEntity.ok("Login exitoso") : ResponseEntity.status(401).body("Credenciales incorrectas");
+        if(success) {
+        	String token = jwtUtil.generateToken(user.getUsername());
+        	return ResponseEntity.ok(token);
+        }
+        return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
 
     @PutMapping("/{id}")

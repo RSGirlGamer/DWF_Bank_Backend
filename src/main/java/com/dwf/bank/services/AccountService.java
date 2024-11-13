@@ -32,7 +32,8 @@ public class AccountService {
         account.setId(UUID.randomUUID());  // Asigna un UUID manualmente antes de persistir
         
         System.out.println(account.getId());
-    	Client_Lender clientLender = clientLenderRepository.findById(account.getClient().getId()).orElse(null);
+        UUID clientId = account.getClient().getId();
+    	Client_Lender clientLender = clientLenderRepository.findById(clientId).orElse(null);
     	System.out.println(clientLender);
     	
     	if (clientLender == null) {
@@ -47,10 +48,10 @@ public class AccountService {
         }
 
         // Si el cliente tiene menos de 3 cuentas, procedemos a agregar la nueva cuenta
-        existingAccounts.add(account); // Agregar la cuenta a la lista de cuentas del cliente
+        /*existingAccounts.add(account); // Agregar la cuenta a la lista de cuentas del cliente
         clientLender.setAccounts(existingAccounts); // Actualizamos la relación
-        clientLenderRepository.save(clientLender); // Guardamos los cambios
-
+        clientLenderRepository.save(clientLender); */// Guardamos los cambios
+        account.setClient(clientLender);
        return accountRepository.save(account);
     }
 

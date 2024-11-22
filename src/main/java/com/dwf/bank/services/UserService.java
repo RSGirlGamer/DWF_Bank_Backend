@@ -76,14 +76,13 @@ public class UserService {
             userRepository.save(user);  // Guardar el usuario con el nuevo estado
         }
     }
-    
-    public boolean login(String username, String password) {
-        User user = userRepository.findByUsername(username);
 
-        if (user != null) {
-            // Compara la contraseña proporcionada con la almacenada
-            return passwordEncoder.matches(password, user.getPassword());
+    public User login(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            return user; // Retornar el usuario si las credenciales son válidas
         }
-        return false;
+        return null;
     }
+
 }

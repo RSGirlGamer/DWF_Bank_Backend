@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,21 +25,27 @@ public class ClientLenderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addClient(@RequestBody Client_Lender clientLender) {
+    public ResponseEntity<Map<String,String>> addClient(@RequestBody Client_Lender clientLender) {
         clientLenderService.save(clientLender);
-        return ResponseEntity.ok("Cliente agregado con ID: " + clientLender.getId());
+        Map<String,String> response = new HashMap<>();
+        response.put("mensaje", "Cliente agregado con ID: " + clientLender.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateClient(@PathVariable UUID id, @RequestBody Client_Lender clientLender) {
+    public ResponseEntity<Map<String,String>> updateClient(@PathVariable UUID id, @RequestBody Client_Lender clientLender) {
         Client_Lender updatedClient = clientLenderService.update(id, clientLender);
-        return ResponseEntity.ok("Cliente actualizado con ID: " + updatedClient.getId());
+        Map<String,String> response = new HashMap<>();
+        response.put("mensaje", "Cliente actualizado con ID: " + updatedClient.getId());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClient(@PathVariable UUID id) {
+    public ResponseEntity<Map<String, String>> deleteClient(@PathVariable UUID id) {
         clientLenderService.delete(id);
-        return ResponseEntity.ok("Cliente desactivado con ID: " + id);
+        Map<String,String> response = new HashMap<>();
+        response.put("mensaje", "Cliente desactivado con ID: " + id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

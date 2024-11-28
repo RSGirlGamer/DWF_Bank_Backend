@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,21 +25,29 @@ public class LoanController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createLoan(@RequestBody Loan loan, @RequestParam(required = false) UUID openedBy) {
+    public ResponseEntity<Map<String, String>> createLoan(@RequestBody Loan loan, @RequestParam(required = false) UUID openedBy) {
         Loan savedLoan = loanService.save(loan, openedBy);
-        return ResponseEntity.ok("Préstamo creado con ID: " + savedLoan.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("Préstamo", ""+savedLoan.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/reject")
-    public ResponseEntity<String> rejectLoan(@PathVariable UUID id, @RequestParam(required = false) UUID reviewedBy) {
+    public ResponseEntity<Map<String, String>> rejectLoan(@PathVariable UUID id, @RequestParam(required = false) UUID reviewedBy) {
         loanService.rejectLoan(id, reviewedBy);
-        return ResponseEntity.ok("Préstamo rechazado con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("id", ""+id);
+        response.put("reviewedBy", ""+reviewedBy);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/approve")
-    public ResponseEntity<String> approveLoan(@PathVariable UUID id, @RequestParam(required = false) UUID reviewedBy) {
+    public ResponseEntity<Map<String, String>> approveLoan(@PathVariable UUID id, @RequestParam(required = false) UUID reviewedBy) {
         loanService.approveLoan(id, reviewedBy);
-        return ResponseEntity.ok("Préstamo aprobado con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("id", ""+id);
+        response.put("reviewedBy", ""+reviewedBy);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

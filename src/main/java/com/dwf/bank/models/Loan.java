@@ -25,15 +25,15 @@ public class Loan {
 	@JoinColumn
 	private Account account;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn
-	private Client_Lender ClientLender;
+	private Client_Lender ClientLender;*/
 	
 	@Column
 	private Double amount;
 	
 	@Column
-	private Integer days;
+	private Integer months;
 	
 	@Column
 	private Double amortizations;

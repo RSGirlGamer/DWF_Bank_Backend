@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,9 +25,11 @@ public class MovementsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addMovement(@RequestBody Movements movement) {
+    public ResponseEntity<Map<String,String>> addMovement(@RequestBody Movements movement) {
         movementsService.save(movement);
-        return ResponseEntity.ok("Movimiento agregado con ID: " + movement.getId());
+        Map<String,String> response = new HashMap<>();
+        response.put("Transacción", ""+movement.getId());
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -35,8 +39,10 @@ public class MovementsController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMovement(@PathVariable UUID id) {
+    public ResponseEntity<Map<String,String>> deleteMovement(@PathVariable UUID id) {
         movementsService.delete(id);
-        return ResponseEntity.ok("Movimiento eliminado con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("Deleted", ""+id);
+        return ResponseEntity.ok(response);
     }
 }

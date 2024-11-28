@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,21 +25,27 @@ public class AccountController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addAccount(@RequestBody Account account) {
+    public ResponseEntity<Map<String,Object>> addAccount(@RequestBody Account account) {
         Account savedAccount = accountService.save(account);
-        return ResponseEntity.ok("Cuenta agregada con ID: " + savedAccount.getId());
+        Map<String,Object> response = new HashMap<>();
+        response.put("Cuenta", savedAccount);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateAccount(@PathVariable UUID id, @RequestBody Account account) {
+    public ResponseEntity<Map<String,String>> updateAccount(@PathVariable UUID id, @RequestBody Account account) {
         Account updatedAccount = accountService.update(id, account);
-        return ResponseEntity.ok("Cuenta actualizada con ID: " + updatedAccount.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Cuenta actualizada con ID: " + updatedAccount.getId());
+        return ResponseEntity.ok(response);
     }
-
+    
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable UUID id) {
+    public ResponseEntity<Map<String,String>> deleteAccount(@PathVariable UUID id) {
         accountService.delete(id);
-        return ResponseEntity.ok("Cuenta eliminada con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", "Cuenta eliminada con ID: " + id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

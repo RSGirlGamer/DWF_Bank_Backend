@@ -3,7 +3,9 @@ package com.dwf.bank.controllers;
 import com.dwf.bank.models.Branch;
 import com.dwf.bank.services.BranchService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dwf.bank.util.RolePermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,30 +29,38 @@ public class BranchController {
     
     @PostMapping("/add")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<String> addBranch(@RequestBody Branch branch) {
+    public ResponseEntity<Map<String, String>> addBranch(@RequestBody Branch branch) {
         Branch savedBranch = branchService.save(branch);
-        return ResponseEntity.ok("Sucursal agregada con ID: " + savedBranch.getId());
+        Map<String,String> response = new HashMap<>();
+        response.put("Sucursal", ""+branch.getId());
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<String> updateBranch(@PathVariable Integer id, @RequestBody Branch branch) {
+    public ResponseEntity<Map<String, String>> updateBranch(@PathVariable Integer id, @RequestBody Branch branch) {
         Branch updatedBranch = branchService.update(id, branch);
-        return ResponseEntity.ok("Sucursal actualizada con ID: " + updatedBranch.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("branch", ""+branch.getId());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<String> deleteBranch(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, String>> deleteBranch(@PathVariable Integer id) {
         branchService.delete(id);
-        return ResponseEntity.ok("Sucursal eliminada con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("branch", ""+id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<Branch> getBranchById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, String>> getBranchById(@PathVariable Integer id) {
         Branch branch = branchService.get(id);
-        return ResponseEntity.ok(branch);
+        Map<String, String> response = new HashMap<>();
+        response.put("branch", ""+id);
+        return ResponseEntity.ok(response);
     }
 
 //    @GetMapping("/all")

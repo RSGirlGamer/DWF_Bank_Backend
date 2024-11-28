@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,21 +25,28 @@ public class BankClerkController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addBankClerk(@RequestBody Bank_Clerk bankClerk) {
+    public ResponseEntity<Map<String, String>> addBankClerk(@RequestBody Bank_Clerk bankClerk) {
         Bank_Clerk savedBankClerk = bankClerkService.save(bankClerk);
-        return ResponseEntity.ok("Dependiente bancario agregado con ID: " + savedBankClerk.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("Bank Clerk", ""+bankClerk.getId());
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBankClerk(@PathVariable UUID id, @RequestBody Bank_Clerk bankClerk) {
+    public ResponseEntity<Map<String, String>> updateBankClerk(@PathVariable UUID id, @RequestBody Bank_Clerk bankClerk) {
         Bank_Clerk updatedBankClerk = bankClerkService.update(id, bankClerk);
-        return ResponseEntity.ok("Dependiente bancario actualizado con ID: " + updatedBankClerk.getId());
+        Map<String, String> response = new HashMap<>();
+        response.put("Bank Clerk", ""+id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteBankClerk(@PathVariable UUID id) {
+    public ResponseEntity<Map<String, String>> deleteBankClerk(@PathVariable UUID id) {
         bankClerkService.delete(id);
-        return ResponseEntity.ok("Dependiente bancario desactivado con ID: " + id);
+        Map<String, String> response = new HashMap<>();
+        response.put("Bank Clerk", ""+id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

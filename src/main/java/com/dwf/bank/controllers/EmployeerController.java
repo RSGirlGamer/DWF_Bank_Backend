@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -27,16 +29,22 @@ public class EmployeerController {
 
     @PutMapping("/{id}/reject")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<String> rejectEmployee(@PathVariable UUID id, @RequestParam UUID rejectedBy) {
+    public ResponseEntity<Map<String, String>> rejectEmployee(@PathVariable UUID id, @RequestParam UUID rejectedBy) {
         employeerService.rejectEmployeer(id, rejectedBy);
-        return ResponseEntity.ok("Empleado rechazado con ID: " + id);
+        Map<String,String> response = new HashMap<>();
+        response.put("Rejected Employee", ""+id);
+        response.put("Rejected By", ""+rejectedBy);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}/approve")
     @PreAuthorize(RolePermissions.SOLO_GERENTES)
-    public ResponseEntity<String> approveEmployee(@PathVariable UUID id, @RequestParam UUID approvedBy) {
+    public ResponseEntity<Map<String, String>> approveEmployee(@PathVariable UUID id, @RequestParam UUID approvedBy) {
         employeerService.approveEmployeer(id, approvedBy);
-        return ResponseEntity.ok("Empleado aprobado con ID: " + id);
+        Map<String,String> response = new HashMap<>();
+        response.put("Approved Employee", ""+id);
+        response.put("Rejected By", ""+approvedBy);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

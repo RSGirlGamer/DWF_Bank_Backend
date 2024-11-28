@@ -1,0 +1,71 @@
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs y archivos de compilación
+*.log
+*.class
+target/
+bin/
+build/
+
+# Configuración de IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Configuración de Eclipse / Spring Tools Suite
+*.classpath
+*.project
+*.settings/
+.apt_generated/
+.springBeans/
+
+# Configuración de Maven
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+**/mvnw
+**/mvnw.cmd
+
+# Archivos generados por el IDE y entornos de trabajo
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Archivos de sistema específicos del desarrollador
+*.env
+.vscode/
+*.code-workspace
+*.history/
+
+# Archivos generados por las pruebas
+*.dmp
+*.hprof
+hs_err_pid*
+
+# Archivos de base de datos local
+*.db
+*.sql
+*.sqlite
+
+# Archivos de configuración específicos del sistema
+local.properties
+*.pid
+*.seed
+
+# Archivos de seguridad
+*.key
+*.pem
+*.crt
+*.cer
+*.p12
+*.jks
+
+# Dependencias descargadas por herramientas externas
+node_modules/
+dist/
+
+# Configuración de docker (opcional, si no usas docker, puedes omitir esta sección)
+docker-compose.override.yml
+.env

@@ -4,33 +4,44 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Claims;
 import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JWTUtil {
-	private final String SECRET_KEY = "Hello74108520.";
-	
-	public String generateToken(String username) {
+	@Value("${jwt.secret}")
+	private String secretKey;
+
+	@Value("${jwt.expiration}")
+	private long expirationTime;
+
+	public String generateToken(String username, String role) {
 		return Jwts.builder()
 				.setSubject(username)
-				.setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() +1000*60*60*10))
-				.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+				.claim("role", "ROLE_" + role)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+				.signWith(SignatureAlgorithm.HS256, secretKey)
 				.compact();
 	}
-	
+
 	public boolean validateToken(String token, String username) {
 		return extractUsername(token).equals(username) && !isTokenExpired(token);
 	}
-	
+
 	public String extractUsername(String token) {
 		return getClaims(token).getSubject();
 	}
-	
+
 	public Boolean isTokenExpired(String token){
 		return getClaims(token).getExpiration().before(new Date());
 	}
-	
-	private Claims getClaims(String token) {
-		return Jwts.parser().setSigningKey("SECRET_KEY").parseClaimsJws(token).getBody();
+
+	public Claims getClaims(String token) {
+		return Jwts.parser()
+				.setSigningKey(secretKey)
+				.parseClaimsJws(token)
+				.getBody();
 	}
 }

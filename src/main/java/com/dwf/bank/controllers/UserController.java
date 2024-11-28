@@ -1,5 +1,7 @@
 package com.dwf.bank.controllers;
 
+import com.dwf.bank.dto.LoginDto;
+import com.dwf.bank.dto.LoginResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import com.dwf.bank.models.User;
 import com.dwf.bank.security.JWTUtil;
 import com.dwf.bank.services.UserService;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,13 +43,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody User user) {
-        boolean success = userService.login(user.getUsername(), user.getPassword());
-        if(success) {
-        	String token = jwtUtil.generateToken(user.getUsername());
-        	return ResponseEntity.ok(token);
+    public ResponseEntity<LoginResponseDto> loginUser(@RequestBody LoginDto loginDto) throws AuthenticationException {
+        User user = userService.login(loginDto.getUsername(), loginDto.getPassword());
+        if (user != null) {
+            String token = jwtUtil.generateToken(user.getUsername(), user.getRole().toString());
+            return ResponseEntity.ok(new LoginResponseDto(token, user.getRole().name()));
+        } else {
+            throw new AuthenticationException("Credenciales invalidas!!");
         }
-        return ResponseEntity.status(401).body("Credenciales incorrectas");
     }
 
     @PutMapping("/{id}")

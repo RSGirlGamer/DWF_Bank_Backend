@@ -64,7 +64,7 @@ public class Client_Lender {
 	private Double salary;
 	
 	@Column
-	private Integer credit_limit;
+	private Double credit_limit;
 	
 	@Enumerated(EnumType.STRING)
 	@Column

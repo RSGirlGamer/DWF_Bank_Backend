@@ -4,6 +4,8 @@ import com.dwf.bank.models.Account;
 import com.dwf.bank.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,12 +19,15 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-    
+
     @GetMapping
+    @PreAuthorize("hasRole('Cliente') or hasRole('Gerente_General')")
     public ResponseEntity<List<Account>> getAllAccounts() {
+        System.out.println("Roles actuales del usuario: " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         List<Account> accounts = accountService.getAllAccounts();
         return ResponseEntity.ok(accounts);
     }
+
 
     @PostMapping("/add")
     public ResponseEntity<Map<String,Object>> addAccount(@RequestBody Account account) {

@@ -23,6 +23,9 @@ public class User {
 	private String username;
 	
 	@Column
+	private String dui;
+	
+	@Column
 	private String password;
 	
 	@Enumerated(EnumType.STRING)

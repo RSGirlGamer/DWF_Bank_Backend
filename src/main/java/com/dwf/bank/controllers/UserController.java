@@ -10,6 +10,10 @@ import com.dwf.bank.models.User;
 import com.dwf.bank.security.JWTUtil;
 import com.dwf.bank.services.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import javax.naming.AuthenticationException;
 
 import java.util.HashMap;
@@ -46,6 +50,7 @@ public class UserController {
         User savedUser = userService.save(user, createdBy);
         Map<String, String> response = new HashMap<>();
         response.put("user", ""+user.getId());
+        response.put("dui", ""+user.getDui());
         return ResponseEntity.ok(response);
     }
 
@@ -59,6 +64,20 @@ public class UserController {
             throw new AuthenticationException("Credenciales invalidas!!");
         }
     }
+    /*@PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logoutUser(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, String> responseMessage = new HashMap<>();
+        request.getSession().invalidate();
+        Cookie jwtCookie = new Cookie("JWT", null); 
+        
+        jwtCookie.setHttpOnly(true);  
+        jwtCookie.setSecure(true);  
+        jwtCookie.setPath("/"); 
+        jwtCookie.setMaxAge(0);
+        
+        responseMessage.put("message", "Sesión cerrada exitosamente.");
+        return ResponseEntity.ok(responseMessage);
+    }*/
 
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> updateUser(@PathVariable UUID id, @RequestBody User user) {
@@ -72,7 +91,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable UUID id) {
         userService.delete(id);
         Map<String, String> response = new HashMap<>();
-        response.put("usurio", ""+id);
+        response.put("usuario", ""+id);
         return ResponseEntity.ok(response);
     }
 }

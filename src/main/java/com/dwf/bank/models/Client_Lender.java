@@ -71,7 +71,7 @@ public class Client_Lender {
 	private UserRole role;
 	
 	@ManyToOne
-	@JoinColumn(nullable = true)
+	@JoinColumn(name = "user_id", nullable = true)
 	private User user;
 	
 	@OneToMany(mappedBy = "client")

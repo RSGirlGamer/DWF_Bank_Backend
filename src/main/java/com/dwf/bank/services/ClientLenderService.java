@@ -17,6 +17,10 @@ public class ClientLenderService {
     public List<Client_Lender> getAllClientLenders() {
         return clientLenderRepository.findAll();
     }
+    
+    public Client_Lender getByUsername(String username) {
+    	return clientLenderRepository.findByUsername(username);
+    }
 
     public Client_Lender get(UUID id) {
         return clientLenderRepository.findById(id).orElse(null);

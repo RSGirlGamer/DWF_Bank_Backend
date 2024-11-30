@@ -26,6 +26,15 @@ public class ClientLenderController {
         List<Client_Lender> clientLenders = clientLenderService.getAllClientLenders();
         return ResponseEntity.ok(clientLenders);
     }
+    @GetMapping("/by-username")
+    @PreAuthorize(RolePermissions.TODOS_LOS_ROLES)
+    public ResponseEntity<Client_Lender> getClientByUsername(@RequestParam String username){
+    	Client_Lender client = clientLenderService.getByUsername(username);
+    	if(client!= null) {
+    		return ResponseEntity.ok(client);
+    	}
+    	return ResponseEntity.notFound().build();
+    }
 
     @PostMapping("/add")
     @PreAuthorize(RolePermissions.TODOS_MENOS_GERENTE_GENERAL)

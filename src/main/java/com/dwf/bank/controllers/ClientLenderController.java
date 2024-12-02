@@ -1,7 +1,9 @@
 package com.dwf.bank.controllers;
 
 import com.dwf.bank.models.Client_Lender;
+import com.dwf.bank.models.UserClientView;
 import com.dwf.bank.services.ClientLenderService;
+import com.dwf.bank.services.UserClientViewService;
 import com.dwf.bank.util.RolePermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class ClientLenderController {
 
     @Autowired
     private ClientLenderService clientLenderService;
+
+    @Autowired
+    private UserClientViewService userClientViewService;
     
     @GetMapping
     @PreAuthorize(RolePermissions.TODOS_LOS_ROLES)
@@ -28,10 +33,10 @@ public class ClientLenderController {
     }
     @GetMapping("/by-username")
     @PreAuthorize(RolePermissions.TODOS_LOS_ROLES)
-    public ResponseEntity<Client_Lender> getClientByUsername(@RequestParam String username){
-    	Client_Lender client = clientLenderService.getByUsername(username);
-    	if(client!= null) {
-    		return ResponseEntity.ok(client);
+    public ResponseEntity<UserClientView> getClientByUsername(@RequestParam String username){
+    	UserClientView userClientView = userClientViewService.findByUsername(username);
+    	if(userClientView!= null) {
+    		return ResponseEntity.ok(userClientView);
     	}
     	return ResponseEntity.notFound().build();
     }

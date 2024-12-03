@@ -22,9 +22,22 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
+    private static final List<String> EXCLUDED_PATHS = List.of(
+            "/swagger-ui",
+            "/v3/api-docs",
+            "/users/login",
+            "/users/register"
+    );
+
     public JWTAuthenticationFilter(JWTUtil jwtUtil, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return EXCLUDED_PATHS.stream().anyMatch(path::startsWith);
     }
 
     @Override
@@ -50,12 +63,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             if (jwtUtil.validateToken(jwtToken, userDetails.getUsername())) {
                 String role = jwtUtil.getClaims(jwtToken).get("role", String.class);
 
-
                 if (!role.startsWith("ROLE_")) {
                     role = "ROLE_" + role;
                 }
-
-                System.out.println("Rol final configurado: " + role);
 
                 List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
                 UsernamePasswordAuthenticationToken authToken =

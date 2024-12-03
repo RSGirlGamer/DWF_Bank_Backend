@@ -42,7 +42,8 @@ public class UserController {
     	User user = userService.get(id);
     	Map<String, String> response = new HashMap<>();
     	response.put("user", ""+id);
-    	return user != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
+        response.put("username", user.getUsername());
+    	return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
@@ -50,7 +51,7 @@ public class UserController {
         User savedUser = userService.save(user, createdBy);
         Map<String, String> response = new HashMap<>();
         response.put("user", ""+user.getId());
-        response.put("dui", ""+user.getDui());
+        response.put("dui", user.getDui());
         return ResponseEntity.ok(response);
     }
 

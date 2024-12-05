@@ -29,7 +29,7 @@ public class UserClientView {
     private String userStatus;
 
     @Column(name = "client_id", columnDefinition = "BINARY(16)")
-    private byte[] clientId;
+    private UUID clientId;
 
     @Column(name = "client_name")
     private String clientName;
